@@ -196,9 +196,19 @@ npm run build
 2. GitHub 저장소 연결: `pocketF/vibe-blueclova`
 3. 빌드 설정:
    - **Build command**: `npm install && npm run build`
+     - ⚠️ **중요**: `npm ci` 대신 `npm install`을 사용하세요. `npm ci`는 package-lock.json이 완벽히 동기화되어야 하는데, 일부 의존성(yaml 등)이 누락될 수 있습니다.
    - **Build output directory**: `dist`
-4. 환경 변수 설정 (Settings → Environment variables)
+4. 환경 변수 설정 (Settings → Environment variables):
+   - `REACT_APP_FIREBASE_API_KEY`
+   - `REACT_APP_FIREBASE_AUTH_DOMAIN`
+   - `REACT_APP_FIREBASE_PROJECT_ID`
+   - `REACT_APP_FIREBASE_STORAGE_BUCKET`
+   - `REACT_APP_FIREBASE_MESSAGING_SENDER_ID`
+   - `REACT_APP_FIREBASE_APP_ID`
 5. **Save and Deploy**
+
+**빌드 오류 해결**:
+- `npm ci` 오류가 발생하면 빌드 명령어를 `npm install --legacy-peer-deps && npm run build`로 변경하세요.
 
 자세한 배포 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참조하세요.
 
