@@ -1,0 +1,327 @@
+<!-- 카페24 상품 상세페이지에 바로 적용 가능한 버튼 코드 -->
+<!-- 구매하기 버튼 영역 근처에 아래 코드를 추가하세요 -->
+
+<style>
+/* 동영상 메시지 버튼 스타일 */
+.video-message-btn-area {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.btn-video-message {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #fff !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.btn-video-message:hover {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+    transform: translateY(-2px);
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.btn-video-message:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.btn-video-message .video-icon {
+    font-size: 18px;
+    display: inline-block;
+}
+
+/* 모달 스타일 */
+#videoMessageModal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.video-modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.video-modal-close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.video-modal-close:hover {
+    color: #333;
+}
+
+.video-modal-content h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.video-upload-area {
+    margin: 20px 0;
+    padding: 40px;
+    border: 2px dashed #FFD700;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #FFFEF5;
+    transition: all 0.3s ease;
+}
+
+.video-upload-area:hover {
+    border-color: #FFA500;
+    background-color: #FFFEF0;
+}
+
+.video-upload-label {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #666;
+    font-size: 14px;
+}
+
+.upload-icon {
+    font-size: 32px;
+}
+
+.video-preview {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.video-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: #f5f5f5;
+    color: #666;
+}
+
+.btn-cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+    .btn-video-message {
+        width: 100%;
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+    
+    .video-modal-content {
+        padding: 20px;
+        width: 95%;
+    }
+    
+    .video-upload-area {
+        padding: 30px 20px;
+    }
+}
+
+/* Blue Clova 영역 기본 숨김 */
+#blue-clova-area {
+    display: none;
+}
+</style>
+
+<!-- Blue Clova 영역 (기본 숨김, 특정 상품번호에서만 표시) -->
+<div id="blue-clova-area">
+    <!-- 버튼 HTML (구매하기 버튼 근처에 배치) -->
+    <div class="video-message-btn-area">
+        <a href="#" class="btn-video-message" onclick="openVideoMessageModal(); return false;">
+            <span class="video-icon">🎥</span>
+            <span class="video-text">동영상 메시지 추가하기</span>
+        </a>
+    </div>
+
+    <!-- 동영상 메시지 모달 -->
+    <div id="videoMessageModal" class="video-modal">
+        <div class="video-modal-content">
+            <span class="video-modal-close" onclick="closeVideoMessageModal()">&times;</span>
+            <h3>동영상 메시지 추가</h3>
+            <div class="video-upload-area">
+                <input type="file" id="videoFile" accept="video/*" style="display: none;">
+                <label for="videoFile" class="video-upload-label">
+                    <span class="upload-icon">📹</span>
+                    <span>동영상 파일 선택</span>
+                </label>
+            </div>
+            <div class="video-preview" id="videoPreview" style="display: none;">
+                <video id="previewVideo" controls style="max-width: 100%; max-height: 300px;"></video>
+            </div>
+            <div class="video-modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeVideoMessageModal()">취소</button>
+                <button type="button" class="btn-submit" onclick="submitVideoMessage()">추가하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 카페24 상품번호 확인 및 Blue Clova 영역 표시/숨김 처리
+(function() {
+    // 카페24 상품번호 변수 (예: '368')
+    // 카페24에서는 {$product_no} 변수를 사용하므로, 실제 페이지에서 이 값을 가져와야 합니다.
+    // 방법 1: 카페24 변수를 직접 사용 (서버 사이드 렌더링)
+    var productNo = '{$product_no}'; // 카페24 변수
+    
+    // 방법 2: URL에서 상품번호 추출 (클라이언트 사이드)
+    // var productNo = getProductNoFromUrl();
+    
+    // 표시할 상품번호 목록 (여러 상품번호를 배열로 관리 가능)
+    var allowedProductNos = ['368']; // 필요시 더 추가: ['368', '369', '370']
+    
+    // 상품번호 확인 후 영역 표시
+    if (allowedProductNos.indexOf(productNo) !== -1 || allowedProductNos.includes(productNo)) {
+        var blueClovaArea = document.getElementById('blue-clova-area');
+        if (blueClovaArea) {
+            blueClovaArea.style.display = 'block';
+        }
+    }
+    
+    // URL에서 상품번호 추출 함수 (방법 2용)
+    function getProductNoFromUrl() {
+        var url = window.location.href;
+        var match = url.match(/product[\/\-_](\d+)/i);
+        if (match && match[1]) {
+            return match[1];
+        }
+        // 다른 패턴 시도
+        match = url.match(/no=(\d+)/i);
+        if (match && match[1]) {
+            return match[1];
+        }
+        return null;
+    }
+})();
+
+function openVideoMessageModal() {
+    document.getElementById('videoMessageModal').style.display = 'flex';
+}
+
+function closeVideoMessageModal() {
+    document.getElementById('videoMessageModal').style.display = 'none';
+    document.getElementById('videoPreview').style.display = 'none';
+    document.getElementById('videoFile').value = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var videoFileInput = document.getElementById('videoFile');
+    if (videoFileInput) {
+        videoFileInput.addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var preview = document.getElementById('videoPreview');
+                var video = document.getElementById('previewVideo');
+                var url = URL.createObjectURL(file);
+                video.src = url;
+                preview.style.display = 'block';
+            }
+        });
+    }
+});
+
+function submitVideoMessage() {
+    var fileInput = document.getElementById('videoFile');
+    if (fileInput && fileInput.files[0]) {
+        // 여기에 동영상 업로드 로직 추가
+        // 카페24 API 또는 서버 업로드 처리
+        alert('동영상 메시지가 추가되었습니다.');
+        closeVideoMessageModal();
+    } else {
+        alert('동영상 파일을 선택해주세요.');
+    }
+}
+
+// 모달 외부 클릭시 닫기
+window.onclick = function(event) {
+    var modal = document.getElementById('videoMessageModal');
+    if (event.target == modal) {
+        closeVideoMessageModal();
+    }
+}
+</script>

@@ -1,0 +1,335 @@
+.video-uploader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.video-uploader-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.video-uploader-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* 파일 선택 영역 */
+.file-select-area {
+  margin-bottom: 20px;
+}
+
+.file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border: 2px dashed #FFD700;
+  border-radius: 8px;
+  background-color: #FFFEF5;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-label:hover {
+  border-color: #FFA500;
+  background-color: #FFFEF0;
+}
+
+.file-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.file-text {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.file-input {
+  display: none;
+}
+
+/* 파일 정보 */
+.file-info {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.file-info p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* 진행률 영역 */
+.progress-area {
+  margin: 20px 0;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  transition: width 0.3s ease;
+  border-radius: 15px;
+}
+
+.progress-text {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.status-text {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 성공 영역 */
+.success-area {
+  text-align: center;
+  padding: 20px;
+  background-color: #f0f9ff;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.success-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.success-area h3 {
+  color: #10b981;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.result-info {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.info-item {
+  margin: 15px 0;
+}
+
+.info-item strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 14px;
+}
+
+.info-item code {
+  display: block;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #e83e8c;
+  word-break: break-all;
+}
+
+.password-code {
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFA500 !important;
+}
+
+.viewer-url {
+  font-size: 12px;
+  color: #667eea !important;
+  word-break: break-all;
+}
+
+/* QR 코드 영역 */
+.qrcode-area {
+  margin: 25px 0;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.qrcode-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.qrcode-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.qrcode-container canvas {
+  border-radius: 4px;
+}
+
+.download-qr-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.download-qr-button:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.download-qr-button:active {
+  transform: translateY(0);
+}
+
+.success-message {
+  color: #666;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.warning-message {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+}
+
+.warning-message p {
+  color: #856404;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 에러 영역 */
+.error-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.error-icon {
+  font-size: 24px;
+}
+
+.error-text {
+  color: #c33;
+  font-size: 14px;
+  margin: 0;
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+/* 버튼 영역 */
+.button-area {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.upload-button,
+.reset-button {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  min-width: 200px;
+}
+
+.upload-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+  box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.upload-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reset-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.reset-button:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .video-uploader-card {
+    padding: 30px 20px;
+  }
+
+  .video-uploader-title {
+    font-size: 24px;
+  }
+
+  .file-label {
+    padding: 30px 20px;
+  }
+
+  .upload-button,
+  .reset-button {
+    width: 100%;
+  }
+}

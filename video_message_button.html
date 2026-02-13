@@ -1,0 +1,72 @@
+<!-- 동영상 메시지 추가하기 버튼 -->
+<!-- 구매하기 버튼 근처에 배치할 HTML 코드 -->
+<div class="video-message-wrapper">
+    <a href="#" class="btn-video-message" onclick="openVideoMessageModal(); return false;">
+        <span class="video-icon">🎥</span>
+        <span class="video-text">동영상 메시지 추가하기</span>
+    </a>
+</div>
+
+<!-- 동영상 메시지 모달 (선택사항) -->
+<div id="videoMessageModal" class="video-modal" style="display: none;">
+    <div class="video-modal-content">
+        <span class="video-modal-close" onclick="closeVideoMessageModal()">&times;</span>
+        <h3>동영상 메시지 추가</h3>
+        <div class="video-upload-area">
+            <input type="file" id="videoFile" accept="video/*" style="display: none;">
+            <label for="videoFile" class="video-upload-label">
+                <span class="upload-icon">📹</span>
+                <span>동영상 파일 선택</span>
+            </label>
+        </div>
+        <div class="video-preview" id="videoPreview" style="display: none;">
+            <video id="previewVideo" controls style="max-width: 100%; max-height: 300px;"></video>
+        </div>
+        <div class="video-modal-actions">
+            <button type="button" class="btn-cancel" onclick="closeVideoMessageModal()">취소</button>
+            <button type="button" class="btn-submit" onclick="submitVideoMessage()">추가하기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openVideoMessageModal() {
+    document.getElementById('videoMessageModal').style.display = 'flex';
+}
+
+function closeVideoMessageModal() {
+    document.getElementById('videoMessageModal').style.display = 'none';
+    document.getElementById('videoPreview').style.display = 'none';
+    document.getElementById('videoFile').value = '';
+}
+
+document.getElementById('videoFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const preview = document.getElementById('videoPreview');
+        const video = document.getElementById('previewVideo');
+        const url = URL.createObjectURL(file);
+        video.src = url;
+        preview.style.display = 'block';
+    }
+});
+
+function submitVideoMessage() {
+    const file = document.getElementById('videoFile').files[0];
+    if (file) {
+        // 여기에 동영상 업로드 로직 추가
+        alert('동영상 메시지가 추가되었습니다.');
+        closeVideoMessageModal();
+    } else {
+        alert('동영상 파일을 선택해주세요.');
+    }
+}
+
+// 모달 외부 클릭시 닫기
+window.onclick = function(event) {
+    const modal = document.getElementById('videoMessageModal');
+    if (event.target == modal) {
+        closeVideoMessageModal();
+    }
+}
+</script>
