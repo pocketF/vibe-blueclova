@@ -7,7 +7,9 @@ Cloudflare Stream API를 사용하여 비디오를 업로드하고, Firebase에 
 ```
 blue_clova/
 ├── public/
-│   └── index.html
+│   ├── index.html
+│   ├── _redirects                 # Netlify 리다이렉트
+│   └── .htaccess                  # Apache 리다이렉트
 ├── src/
 │   ├── components/
 │   │   ├── VideoUploader.jsx      # 비디오 업로드 컴포넌트
@@ -15,12 +17,13 @@ blue_clova/
 │   ├── config/
 │   │   └── firebase.js            # Firebase 설정
 │   ├── services/
-│   │   ├── cloudflareStream.js    # Cloudflare Stream API 서비스
+│   │   ├── cloudflareStream.js    # Cloudflare Stream API 서비스 (Worker 사용)
 │   │   └── firebaseService.js     # Firebase 서비스
-│   ├── App.js
+│   ├── App.js                     # React Router 설정
 │   ├── App.css
 │   ├── index.js
 │   └── index.css
+├── worker.js                      # Cloudflare Worker 코드
 ├── package.json
 └── .env.example
 ```
@@ -75,14 +78,16 @@ REACT_APP_CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
 npm start
 ```
 
-브라우저에서 `http://localhost:3000`으로 접속하면 비디오 업로드 페이지가 표시됩니다.
+브라우저에서 `http://localhost:3000/video_upload`으로 접속하면 비디오 업로드 페이지가 표시됩니다.
+
+**참고**: 루트 경로(`/`)로 접속하면 자동으로 `/video_upload`로 리다이렉트됩니다.
 
 ## 주요 기능
 
 ### 1. 비디오 파일 업로드
 - 드래그 앤 드롭 또는 클릭으로 비디오 파일 선택
 - 업로드 진행률 실시간 표시
-- Cloudflare Stream API를 통한 안전한 업로드
+- Cloudflare Worker를 통한 Cloudflare Stream 업로드
 
 ### 2. 자동 비밀번호 생성
 - 6자리 랜덤 숫자 비밀번호 자동 생성
@@ -91,10 +96,15 @@ npm start
 ### 3. Firebase 저장
 - 업로드 완료 후 자동으로 Firebase Firestore에 저장
 - 저장 정보:
-  - `videoId`: Cloudflare Stream 비디오 ID
+  - `videoId`: Cloudflare Stream 비디오 UID
   - `password`: 6자리 비밀번호
   - `createdAt`: 생성 시간 (서버 타임스탬프)
   - `status`: 상태 (기본값: 'active')
+
+### 4. QR 코드 생성
+- 업로드 완료 후 뷰어 페이지 URL의 QR 코드 자동 생성
+- QR 코드 이미지 다운로드 기능
+- 뷰어 URL: `https://blueclova.com/view/{문서ID}`
 
 ## Firebase 데이터 구조
 
@@ -123,12 +133,17 @@ function App() {
 
 ## API 서비스
 
-### Cloudflare Stream API
+### Cloudflare Stream API (Worker를 통해)
 
 `src/services/cloudflareStream.js`
 
-- `uploadVideoToCloudflare(videoFile, onProgress)`: 비디오 업로드
+- `uploadVideoToCloudflare(videoFile, onProgress)`: Worker를 통해 비디오 업로드
+  - 1단계: Worker에 POST 요청하여 `uploadURL`과 `uid` 받기
+  - 2단계: 받은 `uploadURL`로 실제 비디오 파일 업로드
+  - 3단계: `uid` 반환
 - `getVideoInfo(videoId)`: 비디오 정보 조회
+
+**Worker 주소**: `https://blueclova-upload-proxy.seungyeon-lee.workers.dev`
 
 ### Firebase Service
 
@@ -145,7 +160,9 @@ function App() {
 npm run build
 ```
 
-빌드된 파일은 `build/` 폴더에 생성됩니다.
+빌드된 파일은 `dist/` 폴더에 생성됩니다. (Cloudflare Pages 호환)
+
+**참고**: React Scripts는 기본적으로 `build/` 폴더를 생성하지만, 빌드 스크립트가 자동으로 `dist/`로 이름을 변경합니다.
 
 ## 문제 해결
 
@@ -159,8 +176,31 @@ npm run build
 - Account ID가 올바른지 확인
 
 ### CORS 오류
-- Cloudflare Stream API는 CORS를 지원하지만, 브라우저에서 직접 호출 시 제한이 있을 수 있습니다.
-- 필요시 프록시 서버를 사용하거나 백엔드 API를 통해 업로드하세요.
+- Cloudflare Worker를 통해 업로드하므로 CORS 문제가 해결됩니다.
+- Worker 코드(`worker.js`)에 CORS 헤더가 설정되어 있는지 확인하세요.
+- Worker 배포 후에도 CORS 오류가 발생하면 Worker 로그를 확인하세요.
+
+### Cloudflare Pages 빌드 오류
+- `package.json`과 `package-lock.json`이 동기화되지 않으면 빌드가 실패할 수 있습니다.
+- 빌드 명령어를 `npm install && npm run build`로 설정하세요.
+- 빌드 출력 디렉토리는 `dist`로 설정하세요.
+
+## 배포
+
+### URL 경로
+- 개발: `http://localhost:3000/video_upload`
+- 프로덕션: `https://blueclova.com/video_upload`
+
+### Cloudflare Pages 배포
+1. Cloudflare Dashboard → **Pages** → **Create a project**
+2. GitHub 저장소 연결: `pocketF/vibe-blueclova`
+3. 빌드 설정:
+   - **Build command**: `npm install && npm run build`
+   - **Build output directory**: `dist`
+4. 환경 변수 설정 (Settings → Environment variables)
+5. **Save and Deploy**
+
+자세한 배포 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참조하세요.
 
 ## 라이선스
 
