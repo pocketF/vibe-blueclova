@@ -1,66 +1,98 @@
-# 동영상 메시지 추가하기 버튼
+# Blue Clova - Video Upload System
 
-카페24 상품 상세페이지에 '동영상 메시지 추가하기' 버튼을 추가하는 코드입니다.
+Cloudflare Stream API를 사용하여 비디오를 업로드하고, Firebase에 비디오 ID와 비밀번호를 저장하는 시스템입니다.
 
-## 사용 방법
+## 주요 기능
 
-### 1. HTML 코드 추가
-`video_message_button.html` 파일의 HTML 코드를 카페24 상품 상세페이지의 구매하기 버튼 근처에 추가하세요.
+- ✅ Cloudflare Stream을 통한 비디오 업로드
+- ✅ Firebase Firestore에 비디오 정보 저장
+- ✅ 6자리 비밀번호 자동 생성
+- ✅ QR 코드 생성 및 다운로드
+- ✅ 카페24 상품 상세페이지 통합
 
-일반적으로 카페24 상품 상세페이지에서 구매하기 버튼은 다음과 같은 위치에 있습니다:
-- 상품 옵션 선택 영역 아래
-- 장바구니/구매하기 버튼 영역
+## 프로젝트 구조
 
-### 2. CSS 파일 연결
-카페24 관리자 페이지에서:
-1. **디자인 > 디자인 편집 > HTML/CSS 편집** 메뉴로 이동
-2. `video_message_button.css` 파일의 내용을 CSS 영역에 추가하거나
-3. 별도 CSS 파일로 업로드 후 `<link>` 태그로 연결
-
-### 3. 카페24에 맞는 적용 방법
-
-#### 방법 1: 상품 상세페이지 HTML 직접 수정
-카페24 관리자 페이지에서:
-- **상품 > 상품관리 > 상품상세설명** 메뉴로 이동
-- 구매하기 버튼 근처에 HTML 코드 삽입
-
-#### 방법 2: 스킨 파일 수정 (고급)
-카페24 FTP 접속 후:
-- 상품 상세페이지 템플릿 파일 수정
-- 구매하기 버튼 코드 근처에 버튼 HTML 추가
-
-## 디자인 특징
-
-- 포켓플라워 사이트의 노란색 거베라 톤앤매너 반영
-- 그라데이션 배경 (#FFD700 → #FFA500)
-- 호버 효과 및 부드러운 애니메이션
-- 반응형 디자인 지원
-
-## 커스터마이징
-
-### 버튼 색상 변경
-`video_message_button.css` 파일에서 다음 부분을 수정하세요:
-
-```css
-background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+```
+blue_clova/
+├── src/
+│   ├── components/
+│   │   ├── VideoUploader.jsx      # 비디오 업로드 컴포넌트
+│   │   └── VideoUploader.css
+│   ├── services/
+│   │   ├── cloudflareStream.js    # Cloudflare Stream API 서비스
+│   │   └── firebaseService.js     # Firebase 서비스
+│   ├── config/
+│   │   └── firebase.js            # Firebase 설정
+│   └── App.js                     # React Router 설정
+├── public/
+│   ├── index.html
+│   ├── _redirects                 # Netlify 리다이렉트
+│   └── .htaccess                  # Apache 리다이렉트
+├── worker.js                      # Cloudflare Worker 코드
+└── package.json
 ```
 
-### 버튼 텍스트 변경
-`video_message_button.html` 파일에서 다음 부분을 수정하세요:
+## 설치 및 실행
 
-```html
-<span class="video-text">동영상 메시지 추가하기</span>
+### 개발 환경
+
+```bash
+npm install
+npm start
 ```
 
-## 기능
+개발 서버가 `http://localhost:3000/video_upload`에서 실행됩니다.
 
-- 동영상 파일 업로드
-- 동영상 미리보기
-- 모달 팝업 인터페이스
-- 반응형 디자인
+### 프로덕션 빌드
 
-## 주의사항
+```bash
+npm run build
+```
 
-- JavaScript 함수는 카페24 환경에 맞게 수정이 필요할 수 있습니다.
-- 동영상 업로드 기능은 서버 측 구현이 필요합니다.
-- 카페24의 기존 스타일과 충돌하지 않도록 확인하세요.
+빌드된 파일은 `build/` 폴더에 생성됩니다.
+
+## 배포
+
+### URL 경로
+
+- 개발: `http://localhost:3000/video_upload`
+- 프로덕션: `https://blueclova.com/video_upload`
+
+### 배포 방법
+
+자세한 배포 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참조하세요.
+
+## 환경 변수 설정
+
+`.env` 파일을 생성하고 다음 변수를 설정하세요:
+
+```env
+# Firebase 설정
+REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
+
+# Cloudflare Stream 설정
+REACT_APP_CLOUDFLARE_ACCOUNT_ID=your_account_id
+REACT_APP_CLOUDFLARE_API_TOKEN=your_api_token
+```
+
+## Cloudflare Worker 설정
+
+`worker.js` 파일을 Cloudflare Workers에 배포하고, 다음 환경 변수를 설정하세요:
+
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
+
+자세한 설정 방법은 [cloudflare-worker-setup.md](./cloudflare-worker-setup.md)를 참조하세요.
+
+## 카페24 통합
+
+카페24 상품 상세페이지에 동영상 메시지 버튼을 추가하려면 `cafe24_integration.html` 파일을 참조하세요.
+
+## 라이선스
+
+이 프로젝트는 개인 사용 목적으로 제작되었습니다.

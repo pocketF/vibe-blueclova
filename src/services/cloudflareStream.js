@@ -159,8 +159,8 @@ export const uploadVideoToCloudflare = async (videoFile, onProgress) => {
         errorMessage += 'Access-Control-Allow-Origin: *\n';
         errorMessage += 'Access-Control-Allow-Methods: POST, OPTIONS\n';
         errorMessage += 'Access-Control-Allow-Headers: Content-Type\n\n';
-        errorMessage += '또는 특정 도메인만 허용하려면:\n';
-        errorMessage += 'Access-Control-Allow-Origin: http://localhost:3000\n';
+      errorMessage += '또는 특정 도메인만 허용하려면:\n';
+      errorMessage += 'Access-Control-Allow-Origin: https://blueclova.com\n';
       } else if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
         errorMessage += '요청 시간이 초과되었습니다. 파일 크기가 너무 크거나 네트워크가 느릴 수 있습니다.';
       } else {
